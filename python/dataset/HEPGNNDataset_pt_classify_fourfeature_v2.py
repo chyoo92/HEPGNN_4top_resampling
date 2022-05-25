@@ -15,9 +15,9 @@ import math
 
    
         
-class HEPGNNDataset_h5_LHE(PyGDataset):
+class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
     def __init__(self, **kwargs):
-        super(HEPGNNDataset_h5_LHE, self).__init__(None, transform=None, pre_transform=None)
+        super(HEPGNNDataset_pt_classify_fourfeature_v2, self).__init__(None, transform=None, pre_transform=None)
         self.isLoaded = False
 
         self.fNames = []
@@ -33,21 +33,26 @@ class HEPGNNDataset_h5_LHE(PyGDataset):
 
         offset = self.maxEventsList[fileIdx]
         idx = int(idx - offset)
-     
+
+        
+        data = self.graphList[fileIdx][idx]
+
         
         label = self.labelList[fileIdx][idx]
         weight = self.weightList[fileIdx][idx]
+        real_weight = self.real_weightList[fileIdx][idx]
+        btag = self.btag_List[fileIdx][idx]
         rescale = self.rescaleList[fileIdx][idx]
         procIdxs = self.procList[fileIdx][idx]
         
+        eval_resam = self.eval_resamwList[fileIdx][idx]
+        eval_real = self.eval_realwList[fileIdx][idx]
         
-        feats = torch.Tensor(self.feaList[fileIdx][idx])
- 
-        edges = torch.Tensor(self.edgeList[fileIdx][idx])
-        edges = edges.type(dtype = torch.long)
         
-    
-        data = PyGData(x = feats, edge_index = edges)
+        data.es = eval_resam.item()
+        data.er = eval_real.item()
+        data.bb = btag.item()
+        data.rw = real_weight.item()
         data.ww = weight.item()
 
         data.y = label
@@ -60,7 +65,7 @@ class HEPGNNDataset_h5_LHE(PyGDataset):
         print(procName, fNamePattern)
 
         for fName in glob(fNamePattern):
-            if not fName.endswith(".h5"): continue
+            if not fName.endswith(".pt"): continue
             fileIdx = len(self.fNames)
             self.fNames.append(fName)
 
@@ -88,22 +93,25 @@ class HEPGNNDataset_h5_LHE(PyGDataset):
         self.weightList = []
         self.rescaleList = []
         self.procList = []
+        self.real_weightList = []
+        self.btag_List = []
         
+        self.eval_resamwList = []
+        self.eval_realwList = []
         
-
-        self.feaList = []
-        self.edgeList = []
-        
+    
         
         
         nFiles = len(self.sampleInfo)
         ## Load event contents
         for i, fName in enumerate(self.sampleInfo['fileName']):
 #             print("Loading files... (%d/%d) %s" % (i+1,nFiles,fName), end='\r')
-            f = h5py.File(fName, 'r', libver='latest', swmr=True)
+#             f = h5py.File(fName, 'r', libver='latest', swmr=True)['group']
+            f = torch.load(fName)
             
-            nEvent = len(f['events']['m'])
-     
+#             nEvent = len(f['pos'].get('pos'))
+            nEvent = len(f)
+             
             self.sampleInfo.loc[i, 'nEvent'] = nEvent
 
             
@@ -117,69 +125,53 @@ class HEPGNNDataset_h5_LHE(PyGDataset):
             graphlist = []
             weightlist = []
             weightslist = 0
-
-        
-            f_m = f['events']['m']
-            f_px = f['events']['px']
-            f_py = f['events']['py']
-            f_pz = f['events']['pz']
-            f_id = f['events']['id']
-            f_weight = f['events']['weight']
-
             
-#             f_fea = np.concatenate((f_m.reshape(-1,1),f_px.reshape(-1,1),f_py.reshape(-1,1),f_pz.reshape(-1,1)),axis=1)
-                           
-                           
-            f_edge1 = f['graphs']['edge1']
-            f_edge2 = f['graphs']['edge2']
+            real_weightlist = []
+            real_weightslist = 0
             
-#             f_edge = np.concatenate((f_edge1.reshape(-1,1),f_edge2.reshape(-1,1)),axis=1)
-
+            eval_resamw = []
+            eval_realw = []
             
+            btag_list = []
             
-        
-            f_fea_list = []
-            f_edge_list = []
             for j in range(nEvent):
-                f_fea_reshape = torch.cat((torch.from_numpy(f_m[j]).reshape(-1,1),torch.from_numpy(f_px[j]).reshape(-1,1),torch.from_numpy(f_py[j]).reshape(-1,1),torch.from_numpy(f_pz[j]).reshape(-1,1)),1).float()   
-                
-                
-              
-                #f_edge_reshape = torch.cat((torch.cat((torch.from_numpy(f_edge1[j]).reshape(1,-1),torch.from_numpy(f_edge2[j]).reshape(1,-1)),1).float(),torch.cat((torch.from_numpy(f_edge2[j]).reshape(1,-1),torch.from_numpy(f_edge1[j]).reshape(1,-1)),1).float()),0)
-                f_edge_reshape = torch.cat((torch.from_numpy(f_edge1[j]).reshape(1,-1),torch.from_numpy(f_edge2[j]).reshape(1,-1)),0).float()
-                
-                
-            
-          
-                
-                
-#                 f_fea_reshape = f_fea[j].reshape(-1,4)
-#                 f_edge_reshape = f_edge[j].reshape(2,-1)
-                weights = f_weight[j]
-                
-                
+                btag_list.append(f[j].x[:,4][0])
+                weights = f[j].x[:,6][0]
+               
+      
+      
+#                 print(len(f[j].x[:]))
+                if len(f[j].x[0]) == 8:
+                    real_weights = f[j].x[:,7][0]/np.abs(f[j].x[:,7][0]) 
+                else:
+                    real_weights = f[j].x[:,6][0]/np.abs(f[j].x[:,6][0]) 
+                eval_resamw.append(weights)
+                eval_realw.append(real_weights)
+                    
                 ### weights = w_ik
                 ### weight = sigma_k / M_k
-                weightlist.append(weights*weight)
-#                 weightlist.append(weights)
+             
+                weightlist.append(weights*weight)  
                 weightslist = weightslist + weights
                 
+                real_weightlist.append(real_weights*weight)
+                real_weightslist = real_weightslist + real_weights
                 
+                f[j].x = f[j].x[:,:4]
                 
-                f_fea_list.append(f_fea_reshape)
-              
-                f_edge_list.append(f_edge_reshape)
+                graphlist.append(f[j])
             
             
             
             sumw = weightslist
 #             print(sumw, 'sumw')
             self.sampleInfo.loc[i, 'sumweight'] = sumw
-            
+            self.btag_List.append(btag_list)
+            self.eval_resamwList.append(eval_resamw)
+            self.eval_realwList.append(eval_realw)
+            self.real_weightList.append(real_weightlist)
             self.weightList.append(weightlist)
- 
-            self.feaList.append(f_fea_list)
-            self.edgeList.append(f_edge_list)
+            self.graphList.append(graphlist)
             self.rescaleList.append(torch.ones(nEvent, dtype=torch.float32, requires_grad=False))
             procIdx = procNames.index(self.sampleInfo['procName'][i])
             self.procList.append(torch.ones(nEvent, dtype=torch.int32, requires_grad=False)*procIdx)

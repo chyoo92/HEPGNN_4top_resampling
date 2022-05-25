@@ -15,9 +15,9 @@ import math
 
    
         
-class HEPGNNDataset_h5_fea4_re(PyGDataset):
+class HEPGNNDataset_pt_classify_fourfeature(PyGDataset):
     def __init__(self, **kwargs):
-        super(HEPGNNDataset_h5_fea4_re, self).__init__(None, transform=None, pre_transform=None)
+        super(HEPGNNDataset_pt_classify_fourfeature, self).__init__(None, transform=None, pre_transform=None)
         self.isLoaded = False
 
         self.fNames = []
@@ -35,34 +35,28 @@ class HEPGNNDataset_h5_fea4_re(PyGDataset):
         idx = int(idx - offset)
 
         
+        data = self.graphList[fileIdx][idx]
+
+        
         label = self.labelList[fileIdx][idx]
         weight = self.weightList[fileIdx][idx]
         rescale = self.rescaleList[fileIdx][idx]
         procIdxs = self.procList[fileIdx][idx]
-        btag = torch.Tensor(self.btagList[fileIdx][idx])
-        
-        feats = torch.Tensor(self.feaList[fileIdx][idx])
-        poses = torch.Tensor(self.posList[fileIdx][idx])
-        edges = torch.Tensor(self.edgeList[fileIdx][idx])
-        edges = edges.type(dtype = torch.long)
-        
-
     
-        data = PyGData(x = feats, pos = poses, edge_index = edges)
-        
+     
         data.ww = weight.item()
 
         data.y = label
         
         data.ss = rescale.item()
-#         print(data)
+
         return data
     def addSample(self, procName, fNamePattern, weight=1, logger=None):
         if logger: logger.update(annotation='Add sample %s <= %s' % (procName, fNames))
         print(procName, fNamePattern)
 
         for fName in glob(fNamePattern):
-            if not fName.endswith(".h5"): continue
+            if not fName.endswith(".pt"): continue
             fileIdx = len(self.fNames)
             self.fNames.append(fName)
 
@@ -91,22 +85,19 @@ class HEPGNNDataset_h5_fea4_re(PyGDataset):
         self.rescaleList = []
         self.procList = []
         
-        
-        self.posList = []
-        self.feaList = []
-        self.edgeList = []
-        self.btagList = []
+    
         
         
         nFiles = len(self.sampleInfo)
         ## Load event contents
         for i, fName in enumerate(self.sampleInfo['fileName']):
 #             print("Loading files... (%d/%d) %s" % (i+1,nFiles,fName), end='\r')
-            f = h5py.File(fName, 'r', libver='latest', swmr=True)['group']
+#             f = h5py.File(fName, 'r', libver='latest', swmr=True)['group']
+            f = torch.load(fName)
             
-            nEvent = len(f['pos'].get('pos'))
-
-     
+#             nEvent = len(f['pos'].get('pos'))
+            nEvent = len(f)
+             
             self.sampleInfo.loc[i, 'nEvent'] = nEvent
 
             
@@ -121,39 +112,18 @@ class HEPGNNDataset_h5_fea4_re(PyGDataset):
             weightlist = []
             weightslist = 0
             
-            f_pos = f['pos'].get('pos')
-            f_fea = f['fea'].get('fea')
-            f_edge = f['edge'].get('edge')
-
-
-            
-            f_pos_list = []
-            f_fea_list = []
-            f_edge_list = []
-            f_btag_list = []
+          
             for j in range(nEvent):
-#                 f_pos_reshape = torch.reshape(f_pos[j],(-1,3))
-                f_pos_reshape = f_pos[j].reshape(-1,3)
-                f_fea_reshape = f_fea[j].reshape(-1,7)
-                f_edge_reshape = f_edge[j].reshape(2,-1)
-   
-                weights = f_fea_reshape[:,6][0]/np.abs(f_fea_reshape[:,6][0])
+                weights = f[j].x[:,6][0]
 
                 ### weights = w_ik
                 ### weight = sigma_k / M_k
-#                 weightlist.append(weights*weight)
-                weightlist.append(weights)
+                weightlist.append(weights*weight)  
                 weightslist = weightslist + weights
-                
-                
-                f_pos_list.append(f_pos_reshape)
 
-     
-                f_fea_list.append(f_fea_reshape[:,:4])
-               
-                f_btag_list.append(f_fea_reshape[:,5])
-                
-                f_edge_list.append(f_edge_reshape)
+                f[j].x = f[j].x[:,:4]
+           
+                graphlist.append(f[j])
             
             
             
@@ -162,10 +132,7 @@ class HEPGNNDataset_h5_fea4_re(PyGDataset):
             self.sampleInfo.loc[i, 'sumweight'] = sumw
             
             self.weightList.append(weightlist)
-            self.posList.append(f_pos_list)
-            self.feaList.append(f_fea_list)
-            self.edgeList.append(f_edge_list)
-            self.btagList.append(f_btag_list)
+            self.graphList.append(graphlist)
             self.rescaleList.append(torch.ones(nEvent, dtype=torch.float32, requires_grad=False))
             procIdx = procNames.index(self.sampleInfo['procName'][i])
             self.procList.append(torch.ones(nEvent, dtype=torch.int32, requires_grad=False)*procIdx)

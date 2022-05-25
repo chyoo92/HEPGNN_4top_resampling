@@ -33,13 +33,8 @@ parser.add_argument('--epoch', action='store', type=int, default=400,help='Numbe
 parser.add_argument('--batch', action='store', type=int, default=32, help='Batch size')
 parser.add_argument('--lr', action='store', type=float, default=1e-4,help='Learning rate')
 parser.add_argument('--seed', action='store', type=int, default=12345,help='random seed')
-parser.add_argument('--color', action='store', type=int, default=0, help='edge color')
 parser.add_argument('--fea', action='store', type=int, default=6, help='# fea')
 parser.add_argument('--cla', action='store', type=int, default=3, help='# class')
-
-#parser.add_argument('--r', action='store', type=float, default=0, help='device name')
-#parser.add_argument('--k', action='store', type=int, default=0, help='device name')
-
 
 models = ['GNN1layer_re', 'GNN2layer_re', 'GNN3layer_re', 'GNN1layer_re_lhe','GCN2','GCN_noedge','GCN2_no','GCN2_tanh','GCN3']
 parser.add_argument('--model', choices=models, default=models[0], help='model name')
@@ -62,22 +57,10 @@ if not os.path.exists('result/' + args.output): os.makedirs('result/' + args.out
 
 
 ##### Define dataset instance #####
-# from dataset.HEPGNNDataset_h5_fea4_re import *
-# dset = HEPGNNDataset_h5_fea4_re()
-if args.color == 0:
-#     from dataset.HEPGNNDataset_h5_LHE import *
-#     dset = HEPGNNDataset_h5_LHE()
-    from dataset.HEPGNNDataset_h5_LHE_re2 import *
-    dset = HEPGNNDataset_h5_LHE_re2()
-elif args.color == 2: 
-    from dataset.HEPGNNDataset_h5_LHE_pep import *
-    dset = HEPGNNDataset_h5_LHE_pep()
-else :
-    from dataset.HEPGNNDataset_h5_LHE_color2 import *
-    dset = HEPGNNDataset_h5_LHE_color2()
+from dataset.HHEPGNNDataset_h5_LHE_resampling import *
+dset = HEPGNNDataset_h5_LHE_resampling()
 
-# from dataset.LHEGraphDataset import *
-# dset = LHEGraphDataset()
+
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
     name = sampleInfo['name']

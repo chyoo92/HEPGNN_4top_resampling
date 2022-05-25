@@ -15,9 +15,9 @@ import math
 
    
         
-class HEPGNNDataset_h5_LHE_color2(PyGDataset):
+class HEPGNNDataset_h5_LHE_resampling(PyGDataset):
     def __init__(self, **kwargs):
-        super(HEPGNNDataset_h5_LHE_color2, self).__init__(None, transform=None, pre_transform=None)
+        super(HEPGNNDataset_h5_LHE_resamping, self).__init__(None, transform=None, pre_transform=None)
         self.isLoaded = False
 
         self.fNames = []
@@ -99,7 +99,6 @@ class HEPGNNDataset_h5_LHE_color2(PyGDataset):
 
            
             weight = self.sampleInfo['weight'][i]
-           
 
             graphlist = []
             weightlist = []
@@ -114,8 +113,8 @@ class HEPGNNDataset_h5_LHE_color2(PyGDataset):
             f_weight = f['events']['weight']
    
                            
-            f_edge1 = f['graphs']['edgeColor1']
-            f_edge2 = f['graphs']['edgeColor2']
+            f_edge1 = f['graphs']['edge1']
+            f_edge2 = f['graphs']['edge2']
 
             f_fea_list = []
             f_edge_list = []
@@ -124,12 +123,14 @@ class HEPGNNDataset_h5_LHE_color2(PyGDataset):
                 
 
                 f_edge_reshape = torch.cat((torch.from_numpy(f_edge1[j]).reshape(1,-1),torch.from_numpy(f_edge2[j]).reshape(1,-1)),0).float()
-                
+                    
 
+#                 f_edge_reshape = torch.cat((torch.from_numpy(f_edge2[j]).reshape(1,-1),torch.from_numpy(f_edge1[j]).reshape(1,-1)),0).float()
+                
                 weights = f_weight[j]
-           
+        
                 weights = weights/np.abs(weights)
-      
+                
                 weightlist.append(weights)  
                 
                 

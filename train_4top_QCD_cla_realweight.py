@@ -33,17 +33,12 @@ parser.add_argument('--epoch', action='store', type=int, default=400,help='Numbe
 parser.add_argument('--batch', action='store', type=int, default=32, help='Batch size')
 parser.add_argument('--lr', action='store', type=float, default=1e-4,help='Learning rate')
 parser.add_argument('--seed', action='store', type=int, default=12345,help='random seed')
-
 parser.add_argument('--fea', action='store', type=int, default=6, help='# fea')
 parser.add_argument('--cla', action='store', type=int, default=3, help='# class')
 
-#parser.add_argument('--r', action='store', type=float, default=0, help='device name')
-#parser.add_argument('--k', action='store', type=int, default=0, help='device name')
-
-
 models = ['GNN1layer', 'GNN2layer', 'GNN3layer',
          'GNN1layer_mul', 'GNN2layer_mul', 'GNN3layer_mul']
-parser.add_argument('--model', choices=models, default=models[0], help='model name')
+parser.add_argument('--model', choices=models, default=models[2], help='model name')
 
 
 
@@ -63,8 +58,8 @@ if not os.path.exists('result/' + args.output): os.makedirs('result/' + args.out
 
 
 ##### Define dataset instance #####
-from dataset.HEPGNNDataset_pt2_fea4 import *
-dset = HEPGNNDataset_pt2_fea4()
+from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
+dset = HEPGNNDataset_pt_classify_fourfeature_v2()
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
     name = sampleInfo['name']
@@ -95,19 +90,12 @@ if args.device >= 0 and torch.cuda.is_available():
 optm = optim.Adam(model.parameters(), lr=config['training']['learningRate'])
 
 
-# In[12]:
-
-
 ##### Start training #####
 with open('result/' + args.output+'/summary.txt', 'w') as fout:
     fout.write(str(args))
     fout.write('\n\n')
     fout.write(str(model))
     fout.close()
-
-
-# In[13]:
-
 
 
 from sklearn.metrics import accuracy_score
@@ -132,7 +120,6 @@ for epoch in range(nEpoch):
         scale = data.ss.float().to(device)
         weight = data.ww.float().to(device)
         scaledweight = weight*scale
-
 #         scaledweight = torch.abs(scaledweight)
         pred = model(data)
  
@@ -191,7 +178,7 @@ for epoch in range(nEpoch):
             label = data.y.float().to(device=device)
         
         scale = data.ss.float().to(device)
-        weight = data.ww.float().to(device)
+        weight = data.rw.float().to(device)
         scaledweight = weight*scale
 #         scaledweight = torch.abs(scaledweight)
         pred = model(data)

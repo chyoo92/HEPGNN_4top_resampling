@@ -26,7 +26,7 @@ sys.path.append("./python")
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', action='store', type=str, default='config.yaml', help='Configration file with sample information')
 parser.add_argument('-o', '--output', action='store', type=str, required=True, help='Path to output file')
-#parser.add_argument('-t', '--train', action='store', type=str, required=True, help='Path to training results directory')
+
 parser.add_argument('-a', '--all', action='store_true', help='use all events for the evaluation, no split')
 parser.add_argument('--cla', action='store', type=int, default=3, help='# class')
 
@@ -44,9 +44,9 @@ torch.set_num_threads(os.cpu_count())
 if torch.cuda.is_available() and args.device >= 0: torch.cuda.set_device(args.device)
 
 ##### Define dataset instance #####
-from dataset.HEPGNNDataset_pt2_fea4 import *
+from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
+dset = HEPGNNDataset_pt_classify_fourfeature_v2()
 
-dset = HEPGNNDataset_pt2_fea4()
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
     name = sampleInfo['name']

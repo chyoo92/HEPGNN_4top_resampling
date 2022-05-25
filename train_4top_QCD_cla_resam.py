@@ -63,8 +63,8 @@ if not os.path.exists('result/' + args.output): os.makedirs('result/' + args.out
 
 
 ##### Define dataset instance #####
-from dataset.HEPGNNDataset_pt2_fea4 import *
-dset = HEPGNNDataset_pt2_fea4()
+from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
+dset = HEPGNNDataset_pt_classify_fourfeature_v2()
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
     name = sampleInfo['name']
@@ -154,7 +154,7 @@ for epoch in range(nEpoch):
             trn_acc += accuracy_score(label.to('cpu'), pred.to('cpu'), 
                                       sample_weight=scaledweight.to('cpu'))*ibatch
         else:
-            crit = torch.nn.BCELoss(weight=scaledweight)
+            crit = torch.nn.BCEWithLogitsLoss(weight=scaledweight)
       
             loss = crit(pred.view(-1), label)
             loss.backward()
@@ -210,7 +210,7 @@ for epoch in range(nEpoch):
             val_acc += accuracy_score(label.to('cpu'), pred.to('cpu'), 
                                       sample_weight=scaledweight.to('cpu'))*ibatch
         else:
-            crit = torch.nn.BCELoss(weight=scaledweight)
+            crit = torch.nn.BCEWithLogitsLoss(weight=scaledweight)
             loss = crit(pred.view(-1), label)
 
             label = label.reshape(-1)
