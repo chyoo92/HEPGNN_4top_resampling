@@ -17,10 +17,10 @@ Code explanation : https://changhyun0417.notion.site/Code-HEPGNN_4top_resampling
 
 About make file processing : [root file to h5(graph) file (KNU Tier-3 (resampling))](https://www.notion.so/root-file-to-h5-graph-file-KNU-Tier-3-resampling-a9ec7d9bbaec459aa254dbece96f4a94) 
 
-- [lhe2graph.py](http://lhe2graph.py) : lhe file convert to h5 graph file
+- lhe2graph.py : lhe file convert to h5 graph file
 - lhe2graph_loop.sh : loop script of lhe2graph.py
 - LHE_word_add.sh : input missing word to each lhe file
-- [LHEReader.py](http://LHEReader.py) : jhgoh’s new LHE reader file - need to using
+- LHEReader.py : jhgoh’s new LHE reader file - need to using
 
 ### Training & Validation & Evaluation
 
