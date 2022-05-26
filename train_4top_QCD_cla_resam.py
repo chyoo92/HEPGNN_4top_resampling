@@ -33,6 +33,7 @@ parser.add_argument('--epoch', action='store', type=int, default=400,help='Numbe
 parser.add_argument('--batch', action='store', type=int, default=32, help='Batch size')
 parser.add_argument('--lr', action='store', type=float, default=1e-4,help='Learning rate')
 parser.add_argument('--seed', action='store', type=int, default=12345,help='random seed')
+parser.add_argument('--weight', action='store', type=int, default=0, help='resample weight')
 
 parser.add_argument('--fea', action='store', type=int, default=6, help='# fea')
 parser.add_argument('--cla', action='store', type=int, default=3, help='# class')
@@ -63,8 +64,17 @@ if not os.path.exists('result/' + args.output): os.makedirs('result/' + args.out
 
 
 ##### Define dataset instance #####
-from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
-dset = HEPGNNDataset_pt_classify_fourfeature_v2()
+if args.weight == 1:
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_abs import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_abs()
+elif args.weight == 2:
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_negative import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_negative()
+elif args.weight == 0:
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_v2()
+
+
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
     name = sampleInfo['name']

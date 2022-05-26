@@ -15,9 +15,9 @@ import math
 
    
         
-class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
+class HEPGNNDataset_pt_classify_fourfeature_abs(PyGDataset):
     def __init__(self, **kwargs):
-        super(HEPGNNDataset_pt_classify_fourfeature_v2, self).__init__(None, transform=None, pre_transform=None)
+        super(HEPGNNDataset_pt_classify_fourfeature_abs, self).__init__(None, transform=None, pre_transform=None)
         self.isLoaded = False
 
         self.fNames = []
@@ -137,7 +137,7 @@ class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
             for j in range(nEvent):
                 btag_list.append(f[j].x[:,4][0])
                 weights = f[j].x[:,6][0]
-                
+               
       
       
 #                 print(len(f[j].x[:]))
@@ -147,18 +147,12 @@ class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
                     real_weights = f[j].x[:,6][0]/np.abs(f[j].x[:,6][0]) 
                 eval_resamw.append(weights)
                 eval_realw.append(real_weights)
-                
-                
-                
-                print(weights,'wwww')
-                print(real_weights,'rrr')
-                
-                
+                    
                 ### weights = w_ik
                 ### weight = sigma_k / M_k
-             
-                weightlist.append(weights*weight)  
-                weightslist = weightslist + weights
+                ### for use abs weight "real_wegiths" to abs
+                weightlist.append(np.abs(real_weights)*weight)  
+                weightslist = weightslist + np.abs(real_weights)
                 
                 real_weightlist.append(real_weights*weight)
                 real_weightslist = real_weightslist + real_weights

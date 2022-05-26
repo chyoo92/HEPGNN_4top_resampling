@@ -29,6 +29,7 @@ parser.add_argument('-o', '--output', action='store', type=str, required=True, h
 
 parser.add_argument('-a', '--all', action='store_true', help='use all events for the evaluation, no split')
 parser.add_argument('--cla', action='store', type=int, default=3, help='# class')
+parser.add_argument('--weight', action='store', type=int, default=0, help='resample weight')
 
 parser.add_argument('--device', action='store', type=int, default=0, help='device name')
 parser.add_argument('--batch', action='store', type=int, default=256, help='Batch size')
@@ -44,8 +45,15 @@ torch.set_num_threads(os.cpu_count())
 if torch.cuda.is_available() and args.device >= 0: torch.cuda.set_device(args.device)
 
 ##### Define dataset instance #####
-from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
-dset = HEPGNNDataset_pt_classify_fourfeature_v2()
+if args.weight == 1:
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_abs import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_abs()
+elif args.weight == 2:
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_negative import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_negative()
+elif args.weight == 0:
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_v2()
 
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue

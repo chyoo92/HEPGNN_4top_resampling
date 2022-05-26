@@ -5,6 +5,8 @@ Code explanation : https://changhyun0417.notion.site/Code-HEPGNN_4top_resampling
 - python/dataset/HEPGNNDataset_h5_LHE_resampling.py : used to weight resampling
 - python/dataset/HEPGNNDataset_pt_classify_fourfeature.py : used to classification old version
 - python/dataset/HEPGNNDataset_pt_classify_fourfeature_v2.py : used to classification v2
+- python/dataset/HEPGNNDataset_pt_classify_fourfeature_abs.py : training with abs weight 1
+- python/dataset/HEPGNNDataset_pt_classify_fourfeature_negative.py : training with real weight 1 or -1
 
 ### config file
 
@@ -33,3 +35,12 @@ About make file processing : [root file to h5(graph) file (KNU Tier-3 (resamplin
     - train_4top_resampling_lhe.py : 4top resampling train script
     - eval_4top_resampling_lhe.py : 4top resampling evaluation script
     - train_resampling.sh : 4top resampling bash file
+
+### Temparary : ipynb script
+
+- acc_loss.ipynb : draw several results acc & loss
+- result_plot : draw various result data
+- acc_loss_resample_lhe.ipynb : resampling model result visualization
+- graph_draw.ipynb : 4top flow decay graph plot represent
+- make_graph.ipynb : make “pt” file - involving resampling weight, after selection cut
+- check_resampling_weight.ipynb : almost same “make_graph.ipynb”, just confirm weight distribution

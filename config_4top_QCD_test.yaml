@@ -12,7 +12,7 @@ samples:
 
   - name: 4top
     label: 1
-    path: /users/yewzzang/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/4top_dump_ex2/220323_084833/h5/4top_ex2_delphes_4.pt
+    path: /users/yewzzang/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/4top_dump_ex2/220323_084833/h5_2/4top_ex2_delphes_4.pt
 
     xsec: 0.012
     ngen: 11952188
