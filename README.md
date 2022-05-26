@@ -36,7 +36,7 @@ About make file processing : [root file to h5(graph) file (KNU Tier-3 (resamplin
     - eval_4top_resampling_lhe.py : 4top resampling evaluation script
     - train_resampling.sh : 4top resampling bash file
 
-### Temparary : ipynb script
+### ipynb script
 
 - acc_loss.ipynb : draw several results acc & loss
 - result_plot : draw various result data
