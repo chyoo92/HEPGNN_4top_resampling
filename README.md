@@ -1,4 +1,6 @@
-Code explanation : https://changhyun0417.notion.site/Code-HEPGNN_4top_resampling-22cb89a5da3d4eb08b15ab25760367b1
+#### 4top resamping & 4top,QCD GNN classification
+
+
 ### python folder
 
 - python/model : GNN models
