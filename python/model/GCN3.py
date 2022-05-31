@@ -14,15 +14,33 @@ class GCN3(nn.Module):
         super(GCN3, self).__init__()
         self.fea = kwargs['fea']
         self.cla = kwargs['cla']
+        self.activation = kwargs['activation']
       
         self.conv1 = GCNConv(self.fea, 32)
         self.conv2 = GCNConv(32, 64)
         self.conv3 = GCNConv(64, 64)
-
-        self.fc = nn.Sequential(
-            nn.Linear( 64, 32), nn.ReLU(), nn.BatchNorm1d(32), nn.Dropout(0.5),
-            nn.Linear( 32,  self.cla), nn.Softplus(),
-        )
+        
+        
+        if self.activation == 0: ### softplus
+            self.fc = nn.Sequential(
+                nn.Linear( 64, 32), nn.ReLU(), nn.BatchNorm1d(32), nn.Dropout(0.5),
+                nn.Linear( 32,  self.cla), nn.Softplus(),
+            )
+        elif self.activation == 1: ## ReLU
+            self.fc = nn.Sequential(
+                nn.Linear( 64, 32), nn.ReLU(), nn.BatchNorm1d(32), nn.Dropout(0.5),
+                nn.Linear( 32,  self.cla), nn.ReLU(),
+            )
+        elif self.activation == 2: ## sigmoid
+            self.fc = nn.Sequential(
+                nn.Linear( 64, 32), nn.ReLU(), nn.BatchNorm1d(32), nn.Dropout(0.5),
+                nn.Linear( 32,  self.cla), nn.Sigmoid(),
+            )
+        elif self.activation == 3: ## hard sigmoid
+            self.fc = nn.Sequential(
+                nn.Linear( 64, 32), nn.ReLU(), nn.BatchNorm1d(32), nn.Dropout(0.5),
+                nn.Linear( 32,  self.cla), nn.Hardsigmoid(),
+            )
         
         
     def forward(self, data):

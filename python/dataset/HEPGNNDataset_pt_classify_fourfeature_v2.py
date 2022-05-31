@@ -149,10 +149,7 @@ class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
                 eval_realw.append(real_weights)
                 
                 
-                
-                print(weights,'wwww')
-                print(real_weights,'rrr')
-                
+           
                 
                 ### weights = w_ik
                 ### weight = sigma_k / M_k

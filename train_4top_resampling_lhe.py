@@ -35,7 +35,8 @@ parser.add_argument('--lr', action='store', type=float, default=1e-4,help='Learn
 parser.add_argument('--seed', action='store', type=int, default=12345,help='random seed')
 parser.add_argument('--fea', action='store', type=int, default=6, help='# fea')
 parser.add_argument('--cla', action='store', type=int, default=3, help='# class')
-
+parser.add_argument('--edge', action='store', type=int, default=0, help='# edge type')
+parser.add_argument('--activation', action='store', type=int, default=0, help='# activation type')
 models = ['GNN1layer_re', 'GNN2layer_re', 'GNN3layer_re', 'GNN1layer_re_lhe','GCN2','GCN_noedge','GCN2_no','GCN2_tanh','GCN3']
 parser.add_argument('--model', choices=models, default=models[0], help='model name')
 
@@ -57,7 +58,7 @@ if not os.path.exists('result/' + args.output): os.makedirs('result/' + args.out
 
 
 ##### Define dataset instance #####
-from dataset.HHEPGNNDataset_h5_LHE_resampling import *
+from dataset.HEPGNNDataset_h5_LHE_resampling import *
 dset = HEPGNNDataset_h5_LHE_resampling()
 
 
@@ -66,7 +67,7 @@ for sampleInfo in config['samples']:
     name = sampleInfo['name']
     dset.addSample(name, sampleInfo['path'], weight=sampleInfo['xsec']/sampleInfo['ngen'])
     dset.setProcessLabel(name, sampleInfo['label'])
-dset.initialize()
+dset.initialize(args.edge)
 
 lengths = [int(x*len(dset)) for x in config['training']['splitFractions']]
 lengths.append(len(dset)-sum(lengths))
@@ -80,7 +81,7 @@ valLoader = DataLoader(valDset, batch_size=args.batch, shuffle=False, **kwargs)
 torch.manual_seed(torch.initial_seed())
 
 ##### Define model instance #####
-exec('model = '+args.model+'(fea=args.fea, cla=args.cla, device=args.device)')
+exec('model = '+args.model+'(fea=args.fea, cla=args.cla, activation=args.activation)')
 torch.save(model, os.path.join('result/' + args.output, 'model.pth'))
 
 device = 'cpu'
@@ -92,8 +93,6 @@ if args.device >= 0 and torch.cuda.is_available():
 optm = optim.Adam(model.parameters(), lr=config['training']['learningRate'])
 
 
-# In[12]:
-
 
 ##### Start training #####
 with open('result/' + args.output+'/summary.txt', 'w') as fout:
@@ -101,9 +100,6 @@ with open('result/' + args.output+'/summary.txt', 'w') as fout:
     fout.write('\n\n')
     fout.write(str(model))
     fout.close()
-
-
-# In[13]:
 
 
 
@@ -125,8 +121,7 @@ for epoch in range(nEpoch):
         weight = data.ww.float().to(device)
 
         pred = model(data)
- 
-
+  
         crit = torch.nn.MSELoss(size_average=None, reduce=None, reduction='mean')
 
         loss = crit(pred.view(-1), weight)

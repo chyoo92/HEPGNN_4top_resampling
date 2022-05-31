@@ -17,7 +17,7 @@ import math
         
 class HEPGNNDataset_h5_LHE_resampling(PyGDataset):
     def __init__(self, **kwargs):
-        super(HEPGNNDataset_h5_LHE_resamping, self).__init__(None, transform=None, pre_transform=None)
+        super(HEPGNNDataset_h5_LHE_resampling, self).__init__(None, transform=None, pre_transform=None)
         self.isLoaded = False
 
         self.fNames = []
@@ -70,7 +70,7 @@ class HEPGNNDataset_h5_LHE_resampling(PyGDataset):
 
     def setProcessLabel(self, procName, label):
         self.sampleInfo.loc[self.sampleInfo.procName==procName, 'label'] = label
-    def initialize(self):
+    def initialize(self,edge):
         if self.isLoaded: return
 
         print(self.sampleInfo)
@@ -78,7 +78,6 @@ class HEPGNNDataset_h5_LHE_resampling(PyGDataset):
 
 
 
-    
         self.weightList = []
       
         self.procList = []
@@ -90,7 +89,7 @@ class HEPGNNDataset_h5_LHE_resampling(PyGDataset):
         nFiles = len(self.sampleInfo)
         ## Load event contents
         for i, fName in enumerate(self.sampleInfo['fileName']):
-#             print("Loading files... (%d/%d) %s" % (i+1,nFiles,fName), end='\r')
+
             f = h5py.File(fName, 'r', libver='latest', swmr=True)
             
             nEvent = len(f['events']['m'])
@@ -112,25 +111,28 @@ class HEPGNNDataset_h5_LHE_resampling(PyGDataset):
             f_id = f['events']['id']
             f_weight = f['events']['weight']
    
-                           
-            f_edge1 = f['graphs']['edge1']
-            f_edge2 = f['graphs']['edge2']
-
+            if edge == 0:               
+                f_edge1 = f['graphs']['edge1']
+                f_edge2 = f['graphs']['edge2']
+            elif edge == 1:
+                f_edge1 = f['graphs']['edgeColor1']
+                f_edge2 = f['graphs']['edgeColor2']
+    
             f_fea_list = []
             f_edge_list = []
+            
             for j in range(nEvent):
                 f_fea_reshape = torch.cat((torch.from_numpy(f_m[j]).reshape(-1,1),torch.from_numpy(f_px[j]).reshape(-1,1),torch.from_numpy(f_py[j]).reshape(-1,1),torch.from_numpy(f_pz[j]).reshape(-1,1)),1).float()   
                 
-
-                f_edge_reshape = torch.cat((torch.from_numpy(f_edge1[j]).reshape(1,-1),torch.from_numpy(f_edge2[j]).reshape(1,-1)),0).float()
+                if edge ==2:
+                    f_edge_reshape = torch.tensor([[],[]])
+                else:
+                    f_edge_reshape = torch.cat((torch.from_numpy(f_edge1[j]).reshape(1,-1),torch.from_numpy(f_edge2[j]).reshape(1,-1)),0).float()
                     
-
-#                 f_edge_reshape = torch.cat((torch.from_numpy(f_edge2[j]).reshape(1,-1),torch.from_numpy(f_edge1[j]).reshape(1,-1)),0).float()
                 
+             
                 weights = f_weight[j]
-        
                 weights = weights/np.abs(weights)
-                
                 weightlist.append(weights)  
                 
                 
@@ -139,9 +141,7 @@ class HEPGNNDataset_h5_LHE_resampling(PyGDataset):
                 f_fea_list.append(f_fea_reshape)
               
                 f_edge_list.append(f_edge_reshape)
-            
-            
-
+       
             self.weightList.append(weightlist)
  
             self.feaList.append(f_fea_list)
