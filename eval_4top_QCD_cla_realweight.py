@@ -45,21 +45,9 @@ torch.set_num_threads(os.cpu_count())
 if torch.cuda.is_available() and args.device >= 0: torch.cuda.set_device(args.device)
 
 ##### Define dataset instance #####
-if args.weight == 1:
-    from dataset.HEPGNNDataset_pt_classify_fourfeature_abs import *
-    dset = HEPGNNDataset_pt_classify_fourfeature_abs()
-elif args.weight == 2:
-    from dataset.HEPGNNDataset_pt_classify_fourfeature_negative import *
-    dset = HEPGNNDataset_pt_classify_fourfeature_negative()
-elif args.weight == 0:
-    from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
-    dset = HEPGNNDataset_pt_classify_fourfeature_v2()
-elif args.weight == 3:
-    from dataset.HEPGNNDataset_pt_classify_fourfeature_v4 import *
-    dset = HEPGNNDataset_pt_classify_fourfeature_v4()
-elif args.weight == 4:
-    from dataset.HEPGNNDataset_pt_classify_fourfeature_v6 import *
-    dset = HEPGNNDataset_pt_classify_fourfeature_v6()
+
+from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
+dset = HEPGNNDataset_pt_classify_fourfeature_v2()
 
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
@@ -168,7 +156,7 @@ for i, data in enumerate(tqdm(testLoader)):
     data = data.to(device)
     label = data.y.float().to(device=device)
     scale = data.ss.float().to(device)
-    weight = data.ww.float().to(device)
+    weight = data.rw.float().to(device)
     real_weight = data.rw.float().to(device)
     
     eval_resampling_weight = data.es.float().to(device)

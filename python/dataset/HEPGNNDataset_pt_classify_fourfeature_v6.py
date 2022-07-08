@@ -15,9 +15,9 @@ import math
 
    
         
-class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
+class HEPGNNDataset_pt_classify_fourfeature_v6(PyGDataset):
     def __init__(self, **kwargs):
-        super(HEPGNNDataset_pt_classify_fourfeature_v2, self).__init__(None, transform=None, pre_transform=None)
+        super(HEPGNNDataset_pt_classify_fourfeature_v6, self).__init__(None, transform=None, pre_transform=None)
         self.isLoaded = False
 
         self.fNames = []
@@ -58,7 +58,8 @@ class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
         data.y = label
         
         data.ss = rescale.item()
-
+        data.rs = []
+       
         return data
     def addSample(self, procName, fNamePattern, weight=1, logger=None):
         if logger: logger.update(annotation='Add sample %s <= %s' % (procName, fNames))
@@ -136,16 +137,21 @@ class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
             
             for j in range(nEvent):
                 btag_list.append(f[j].x[:,4][0])
-#                 print(np.array(f[j].x).shape)
-                weights = f[j].x[:,6][0]/np.abs(f[j].x[:,6][0]) 
-#                 print(weights)
-      
-      
-#                 print(len(f[j].x[:]))
-                if len(f[j].x[0]) == 8:
-                    real_weights = f[j].x[:,7][0]/np.abs(f[j].x[:,7][0]) 
+                if f[j].y == 0:
+                    weights = f[j].x[:,6][0]/np.abs(f[j].x[:,6][0]) 
                 else:
-                    real_weights = f[j].x[:,6][0]/np.abs(f[j].x[:,6][0]) 
+                    weights = f[j].rs
+               
+                    
+#                 print(weights)
+#                 print(f[j].x[:,4][0])
+#                 weights = f[j].rs
+#                 print(weights)
+ 
+                if len(f[j].x[0]) == 8:
+                    real_weights = f[j].x[:,7][0]/torch.abs(f[j].x[:,7][0]) 
+                else:
+                    real_weights = f[j].x[:,6][0]/torch.abs(f[j].x[:,6][0]) 
                 eval_resamw.append(weights)
                 eval_realw.append(real_weights)
                 
@@ -161,7 +167,7 @@ class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
                 real_weightlist.append(real_weights*weight)
                 real_weightslist = real_weightslist + real_weights
                 
-                f[j].x = f[j].x[:,:6]
+                f[j].x = f[j].x[:,:4]
                 
                 graphlist.append(f[j])
             

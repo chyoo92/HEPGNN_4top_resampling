@@ -15,9 +15,9 @@ import math
 
    
         
-class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
+class HEPGNNDataset_pt_classify_fourfeature_v4(PyGDataset):
     def __init__(self, **kwargs):
-        super(HEPGNNDataset_pt_classify_fourfeature_v2, self).__init__(None, transform=None, pre_transform=None)
+        super(HEPGNNDataset_pt_classify_fourfeature_v4, self).__init__(None, transform=None, pre_transform=None)
         self.isLoaded = False
 
         self.fNames = []
@@ -161,7 +161,7 @@ class HEPGNNDataset_pt_classify_fourfeature_v2(PyGDataset):
                 real_weightlist.append(real_weights*weight)
                 real_weightslist = real_weightslist + real_weights
                 
-                f[j].x = f[j].x[:,:6]
+                f[j].x = f[j].x[:,:4]
                 
                 graphlist.append(f[j])
             

@@ -34,6 +34,7 @@ parser.add_argument('--device', action='store', type=int, default=0, help='devic
 parser.add_argument('--batch', action='store', type=int, default=256, help='Batch size')
 parser.add_argument('--seed', action='store', type=int, default=12345, help='random seed')
 parser.add_argument('--edge', action='store', type=int, default=0, help='# edge type')
+parser.add_argument('--activation', action='store', type=int, default=0, help='# activation type')
 args = parser.parse_args()
 
 config = yaml.load(open(args.config).read(), Loader=yaml.FullLoader)
@@ -45,14 +46,16 @@ torch.set_num_threads(os.cpu_count())
 if torch.cuda.is_available() and args.device >= 0: torch.cuda.set_device(args.device)
 
 ##### Define dataset instance #####
-from dataset.HEPGNNDataset_h5_LHE_resampling import *
-dset = HEPGNNDataset_h5_LHE_resampling()
+# from dataset.HEPGNNDataset_h5_LHE_resampling import *
+# dset = HEPGNNDataset_h5_LHE_resampling()
+from dataset.HEPGNNDataset_pt_classify_fourfeature_v5 import *
+dset = HEPGNNDataset_pt_classify_fourfeature_v5()
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
     name = sampleInfo['name']
     dset.addSample(name, sampleInfo['path'], weight=sampleInfo['xsec']/sampleInfo['ngen'])
     dset.setProcessLabel(name, sampleInfo['label'])
-dset.initialize(args.edge)
+dset.initialize()
 lengths = [int(x*len(dset)) for x in config['training']['splitFractions']]
 lengths.append(len(dset)-sum(lengths))
 torch.manual_seed(config['training']['randomSeed1'])
@@ -64,7 +67,7 @@ if args.all:
 else:
     trnDset, valDset, testDset = torch.utils.data.random_split(dset, lengths)
     #testLoader = DataLoader(trnDset, **kwargs)
-    #testLoader = DataLoader(valDset, **kwargs)
+    #testLoader = DataLoad3er(valDset, **kwargs)
     testLoader = DataLoader(testDset, **kwargs)
 torch.manual_seed(torch.initial_seed())
 
@@ -73,7 +76,7 @@ from model.allModel import *
 
 model = torch.load('result/' + args.output+'/model.pth', map_location='cpu')
 model.load_state_dict(torch.load('result/' + args.output+'/weight.pth', map_location='cpu'))
-
+print(model)
 
 device = 'cpu'
 if args.device >= 0 and torch.cuda.is_available():
@@ -103,7 +106,7 @@ val_loss = 0.
 for i, data in enumerate(tqdm(testLoader)):
 
     data = data.to(device)
-    weight = data.ww.float().to(device)
+    weight = data.rw.float().to(device)
     pred = model(data)
 
 

@@ -15,9 +15,9 @@ import math
 
    
         
-class HEPGNNDataset_h5_LHE_resampling(PyGDataset):
+class HEPGNNDataset_h5_LHE_resampling4(PyGDataset):
     def __init__(self, **kwargs):
-        super(HEPGNNDataset_h5_LHE_resampling, self).__init__(None, transform=None, pre_transform=None)
+        super(HEPGNNDataset_h5_LHE_resampling4, self).__init__(None, transform=None, pre_transform=None)
         self.isLoaded = False
 
         self.fNames = []
@@ -109,13 +109,7 @@ class HEPGNNDataset_h5_LHE_resampling(PyGDataset):
             f_py = f['events']['py']
             f_pz = f['events']['pz']
             f_id = f['events']['id']
-            f_st = f['events']['status']
-      
-       
-                        
             
-            
-
             f_weight = f['events']['weight']
    
             if edge == 0:               
@@ -129,24 +123,15 @@ class HEPGNNDataset_h5_LHE_resampling(PyGDataset):
             f_edge_list = []
             
             for j in range(nEvent):
-     
-                f_fea_reshape = torch.cat((torch.from_numpy(f_m[j][f_st[j]!=-1]).reshape(-1,1),torch.from_numpy(f_px[j][f_st[j]!=-1]).reshape(-1,1),torch.from_numpy(f_py[j][f_st[j]!=-1]).reshape(-1,1),torch.from_numpy(f_pz[j][f_st[j]!=-1]).reshape(-1,1)),1).float()   
-                f_edge_reshape = torch.tensor([[],[]])
+                f_fea_reshape = torch.cat((torch.from_numpy(f_m[j]).reshape(-1,1),torch.from_numpy(f_px[j]).reshape(-1,1),torch.from_numpy(f_py[j]).reshape(-1,1),torch.from_numpy(f_pz[j]).reshape(-1,1)),1).float()   
+                
                 if edge ==2:
                     f_edge_reshape = torch.tensor([[],[]])
                 else:
                     f_edge_reshape = torch.cat((torch.from_numpy(f_edge1[j]).reshape(1,-1),torch.from_numpy(f_edge2[j]).reshape(1,-1)),0).float()
                     
                 
-                    f_edge_reshape = np.array(f_edge_reshape)
-                    f_edge_reshape = np.delete(f_edge_reshape,np.where(f_edge_reshape[0] == 1),axis=1)
-                    f_edge_reshape = np.delete(f_edge_reshape,np.where(f_edge_reshape[0] == 0),axis=1)
-                    
-                    f_edge_reshape = np.delete(f_edge_reshape,np.where(f_edge_reshape[1] == 1),axis=1)
-                    f_edge_reshape = np.delete(f_edge_reshape,np.where(f_edge_reshape[1] == 0),axis=1)
-                    f_edge_reshape = torch.Tensor(f_edge_reshape).float()
-                    f_edge_reshape = f_edge_reshape - 2
-               
+             
                 weights = f_weight[j]
                 weights = weights/np.abs(weights)
                 weightlist.append(weights)  

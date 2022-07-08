@@ -118,7 +118,7 @@ for epoch in range(nEpoch):
         
             
         scale = data.ss.float().to(device)
-        weight = data.ww.float().to(device)
+        weight = data.rw.float().to(device)
         scaledweight = weight*scale
 #         scaledweight = torch.abs(scaledweight)
         pred = model(data)

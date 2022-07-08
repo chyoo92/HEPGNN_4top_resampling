@@ -73,7 +73,12 @@ elif args.weight == 2:
 elif args.weight == 0:
     from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
     dset = HEPGNNDataset_pt_classify_fourfeature_v2()
-
+elif args.weight == 3:
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_v4 import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_v4()
+elif args.weight == 4:
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_v6 import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_v6()
 
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
@@ -132,6 +137,7 @@ for epoch in range(nEpoch):
     optm.zero_grad()
 
     for i, data in enumerate(tqdm(trnLoader, desc='epoch %d/%d' % (epoch+1, nEpoch))):
+        
         data = data.to(device)
         if args.cla == 3:
             label = data.y.long().to(device=device)
