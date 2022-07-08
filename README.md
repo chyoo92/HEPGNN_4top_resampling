@@ -5,17 +5,26 @@
 
 - python/model : GNN models
 - python/dataset/HEPGNNDataset_h5_LHE_resampling.py : used to weight resampling
+- python/dataset/HEPGNNDataset_h5_LHE_resampling4.py : used to weight resampling 4fea
 - python/dataset/HEPGNNDataset_pt_classify_fourfeature.py : used to classification old version
-- python/dataset/HEPGNNDataset_pt_classify_fourfeature_v2.py : used to classification v2
 - python/dataset/HEPGNNDataset_pt_classify_fourfeature_abs.py : training with abs weight 1
 - python/dataset/HEPGNNDataset_pt_classify_fourfeature_negative.py : training with real weight 1 or -1
+- python/dataset/HEPGNNDataset_pt_classify_fourfeature_v2.py : classification 6fea
+- python/dataset/HEPGNNDataset_pt_classify_fourfeature_v3.py : resampling 6fea
+- python/dataset/HEPGNNDataset_pt_classify_fourfeature_v4.py : classification 4fea
+- python/dataset/HEPGNNDataset_pt_classify_fourfeature_v5.py : resampling 4fea
+- python/dataset/HEPGNNDataset_pt_classify_fourfeature_v6.py : classification 4fea with resampling
 
 ### config file
 
-- config_4top_QCD.yaml : for classification training
-- config_4top_QCD_v2.yaml : for classification training (weight resave paht)
-- config_4top_QCD_test.yaml : train / validation script working test
+- config_4top_QCD_old.yaml : for classification training
+- config_4top_QCD_v2.yaml : for classification training (weight resave path)
+- config_4top_QCD_w1.yaml : 4top & QCD classification with 9s resampling 
+- config_4top_QCD_w2.yaml : 4top & QCD classification with all resampling
+- config_resamp_jet.yaml : all resampling
+- config_resamp_jet2.yaml : 9s resampling
 - config_resampling.yaml : for 4top weight resampling
+- config_resampling_eval.yaml : for 4top weight resampling evaluation
 
 ### Make file
 
