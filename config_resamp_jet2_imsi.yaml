@@ -3,8 +3,8 @@ samples:
 
   - name: 4top
     label: 1
-#     path: /users/yewzzang/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/*/*/h5_3/*.pt
-    path : /users/yewzzang/data_graph/pt/ttbar_weight_210719/alledge/*99_0.pt
+    path: /users/yewzzang/data_graph/h5/4top/ev1_v2/*5.h5
+#     path : /users/yewzzang/data_graph/pt/ttbar_weight_210719/noedge/*99_0.pt
     xsec: 0.012
     ngen: 11952188
 

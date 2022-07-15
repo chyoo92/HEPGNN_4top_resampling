@@ -129,7 +129,7 @@ for i in range(len(res)):
         edges = torch.Tensor(edge_t).type(dtype = torch.long)
     
 
-        label = torch.Tensor([0])
+        label = torch.Tensor([2])
         
 
 	

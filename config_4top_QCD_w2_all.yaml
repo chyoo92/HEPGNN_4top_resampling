@@ -2,22 +2,22 @@
 samples:
   - name: QCD700
     label: 0
-    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT700*/*.pt
+    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT700*_all/*.pt
     xsec: 6330
     ngen: 48158738
   - name: QCD1000
     label: 0
-    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT1000*/*.pt
+    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT1000*_all/*.pt
     xsec: 1090
     ngen: 14353647
   - name: QCD1500
     label: 0
-    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT1500*/*.pt
+    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT1500*_all/*.pt
     xsec: 99.1
     ngen: 10955087
   - name: QCD2000
     label: 0
-    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT2000/*.pt
+    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT2000_all/*.pt
     xsec: 20.2
     ngen: 5475677
 

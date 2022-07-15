@@ -4,7 +4,7 @@ samples:
   - name: 4top
     label: 1
 #     path: /users/yewzzang/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/*/*/h5_3/*.pt
-    path : /users/yewzzang/data_graph/pt/4top_weight_210709/*_all/*.pt
+    path : /users/yewzzang/data_graph/pt/ttbar_weight_210719/alledge/*.pt
     xsec: 0.012
     ngen: 11952188
 
