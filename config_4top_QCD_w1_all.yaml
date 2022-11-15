@@ -2,29 +2,28 @@
 samples:
   - name: QCD700
     label: 0
-    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT700*_all/*.pt
+    path: /users/yewzzang/data_graph/h5/QCD/alledge/HT700*/*.h5
     xsec: 6330
     ngen: 48158738
   - name: QCD1000
     label: 0
-    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT1000*_all/*.pt
+    path: /users/yewzzang/data_graph/h5/QCD/alledge/HT1000*/*.h5
     xsec: 1090
     ngen: 14353647
   - name: QCD1500
     label: 0
-    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT1500*_all/*.pt
+    path: /users/yewzzang/data_graph/h5/QCD/alledge/HT1500*/*.h5
     xsec: 99.1
     ngen: 10955087
   - name: QCD2000
     label: 0
-    path: /users/yewzzang/data_graph/pt/QCD_weight_210709/HT2000_all/*.pt
+    path: /users/yewzzang/data_graph/h5/QCD/alledge/HT2000/*.h5
     xsec: 20.2
     ngen: 5475677
 
   - name: 4top
     label: 1
-#     path: /users/yewzzang/TTTT_TuneCP5_13TeV-amcatnlo-pythia8/*/*/h5_3/*1.pt
-    path : /users/yewzzang/data_graph/pt/4top_weight_210709/*w1_alledge/*.pt
+    path : /users/yewzzang/data_graph/h5/4top/alledge_w1/*/*.h5
     xsec: 0.012
     ngen: 11952188
 

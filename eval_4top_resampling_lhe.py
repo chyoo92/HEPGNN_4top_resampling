@@ -48,8 +48,8 @@ if torch.cuda.is_available() and args.device >= 0: torch.cuda.set_device(args.de
 ##### Define dataset instance #####
 # from dataset.HEPGNNDataset_h5_LHE_resampling import *
 # dset = HEPGNNDataset_h5_LHE_resampling()
-from dataset.HEPGNNDataset_pt_classify_fourfeature_v5 import *
-dset = HEPGNNDataset_pt_classify_fourfeature_v5()
+from dataset.HEPGNNDataset_pt_classify_fourfeature_v5_h5 import *
+dset = HEPGNNDataset_pt_classify_fourfeature_v5_h5()
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
     name = sampleInfo['name']
@@ -76,7 +76,7 @@ from model.allModel import *
 
 model = torch.load('result/' + args.output+'/model.pth', map_location='cpu')
 model.load_state_dict(torch.load('result/' + args.output+'/weight.pth', map_location='cpu'))
-print(model)
+
 
 device = 'cpu'
 if args.device >= 0 and torch.cuda.is_available():

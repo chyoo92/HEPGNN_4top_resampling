@@ -1,43 +1,41 @@
-#!/bin/bash
+#!/bin/bash 
 
-# python train_4top_QCD_cla_resam.py --config config_4top_QCD_v2_no.yaml --epoch 200 --batch 1024 -o date20220713_ttbar_cla_noedge_1L --device 1 --cla 1 --model GNN1layer --fea 4 --lr 1e-3 --weight 3
+# python train_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_3fea_all_2L_w2 --device 3 --epoch 200 --batch 1024 --lr 1e-3 --seed 12345 --weight 1 --fea 3 --cla 1 --model GNN2layer
 
-# python eval_4top_QCD_cla.py --config config_4top_QCD_v2_no.yaml --batch 1 -o date20220713_ttbar_cla_noedge_1L --device 1 --cla 1 --weight 3
-
-# python train_4top_QCD_cla_resam.py --config config_4top_QCD_v2_no.yaml --epoch 200 --batch 1024 -o date20220713_ttbar_cla_noedge_2L --device 1 --cla 1 --model GNN2layer --fea 4 --lr 1e-3 --weight 3
-
-# python eval_4top_QCD_cla.py --config config_4top_QCD_v2_no.yaml --batch 1 -o date20220713_ttbar_cla_noedge_2L --device 1 --cla 1 --weight 3
+# python eval_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_3fea_all_2L_w2 --device 3 --cla 1 --weight 1 --batch 1 --seed 12345 --fea 3
 
 
-# python train_4top_QCD_cla_resam.py --config config_4top_QCD_v2_all.yaml --epoch 200 --batch 1024 -o date20220713_ttbar_cla_alledge_1L --device 1 --cla 1 --model GNN1layer --fea 4 --lr 1e-3 --weight 3
+# python train_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_4fea_all_2L_w2 --device 3 --epoch 200 --batch 1024 --lr 1e-3 --seed 12345 --weight 1 --fea 4 --cla 1 --model GNN2layer
 
-# python eval_4top_QCD_cla.py --config config_4top_QCD_v2_all.yaml --batch 1 -o date20220713_ttbar_cla_alledge_1L --device 1 --cla 1 --weight 3
-
-# python train_4top_QCD_cla_resam.py --config config_4top_QCD_v2_all.yaml --epoch 200 --batch 1024 -o date20220713_ttbar_cla_alledge_2L --device 1 --cla 1 --model GNN2layer --fea 4 --lr 1e-3 --weight 3
-
-# python eval_4top_QCD_cla.py --config config_4top_QCD_v2_all.yaml --batch 1 -o date20220713_ttbar_cla_alledge_2L --device 1 --cla 1 --weight 3
+# python eval_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_4fea_all_2L_w2 --device 3 --cla 1 --weight 1 --batch 1 --seed 12345 --fea 4
 
 
+# python train_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_5fea_all_2L_w2 --device 3 --epoch 200 --batch 1024 --lr 1e-3 --seed 12345 --weight 1 --fea 5 --cla 1 --model GNN2layer
+
+# python eval_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_5fea_all_2L_w2 --device 3 --cla 1 --weight 1 --batch 1 --seed 12345 --fea 5
 
 
+# python train_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_3fea_all_3L_w2 --device 3 --epoch 200 --batch 1024 --lr 1e-3 --seed 12345 --weight 1 --fea 3 --cla 1 --model GNN3layer
 
-python train_4top_QCD_cla_resam.py --config config_4top_QCD_w1_all.yaml --epoch 200 --batch 1024 -o date20220714_4top_cla_alledge_w1_L1 --device 0 --cla 1 --model GNN1layer --fea 4 --lr 1e-3 --weight 4
-
-python eval_4top_QCD_cla.py --config config_4top_QCD_w1_all.yaml --batch 1 -o date20220714_4top_cla_alledge_w1_L1 --device 0 --cla 1 --weight 4
-
-
-python train_4top_QCD_cla_resam.py --config config_4top_QCD_w2_all.yaml --epoch 200 --batch 1024 -o date20220714_4top_cla_alledge_w2_L1 --device 0 --cla 1 --model GNN1layer --fea 4 --lr 1e-3 --weight 4
-
-python eval_4top_QCD_cla.py --config config_4top_QCD_w2_all.yaml --batch 1 -o date20220714_4top_cla_alledge_w2_L1 --device 0 --cla 1 --weight 4
+# python eval_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_3fea_all_3L_w2 --device 3 --cla 1 --weight 1 --batch 1 --seed 12345 --fea 3
 
 
+# python train_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_4fea_all_3L_w2 --device 3 --epoch 200 --batch 1024 --lr 1e-3 --seed 12345 --weight 1 --fea 4 --cla 1 --model GNN3layer
 
-python train_4top_QCD_cla_resam.py --config config_4top_QCD_w1_all.yaml --epoch 200 --batch 1024 -o date20220714_4top_cla_alledge_w1_L2 --device 0 --cla 1 --model GNN2layer --fea 4 --lr 1e-3 --weight 4
+# python eval_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_4fea_all_3L_w2 --device 3 --cla 1 --weight 1 --batch 1 --seed 12345 --fea 4
 
-python eval_4top_QCD_cla.py --config config_4top_QCD_w1_all.yaml --batch 1 -o date20220714_4top_cla_alledge_w1_L2 --device 0 --cla 1 --weight 4
+
+# python train_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_5fea_all_3L_w2 --device 3 --epoch 200 --batch 1024 --lr 1e-3 --seed 12345 --weight 1 --fea 5 --cla 1 --model GNN3layer
+
+# python eval_gnn.py --config config_4top_QCD_w2_all.yaml -o 20220819_4top_QCD_5fea_all_3L_w2 --device 3 --cla 1 --weight 1 --batch 1 --seed 12345 --fea 5
+
+
+python train_gnn.py --config config_4top_ttbar_w2_all.yaml -o 20220819_4top_ttbar_4fea_all_3L_w2 --device 2 --epoch 200 --batch 1024 --lr 1e-3 --seed 12345 --weight 1 --fea 4 --cla 1 --model GNN3layer
+
+python eval_gnn.py --config config_4top_ttbar_w2_all.yaml -o 20220819_4top_ttbar_4fea_all_3L_w2 --device 2 --cla 1 --weight 1 --batch 1 --seed 12345 --fea 4
 
 
 
-python train_4top_QCD_cla_resam.py --config config_4top_QCD_w2_all.yaml --epoch 200 --batch 1024 -o date20220714_4top_cla_alledge_w2_L2 --device 0 --cla 1 --model GNN2layer --fea 4 --lr 1e-3 --weight 4
+python train_gnn.py --config config_4top_ttbar_w2_all.yaml -o 20220819_4top_ttbar_5fea_all_3L_w2 --device 2 --epoch 200 --batch 1024 --lr 1e-3 --seed 12345 --weight 1 --fea 5 --cla 1 --model GNN3layer
 
-python eval_4top_QCD_cla.py --config config_4top_QCD_w2_all.yaml --batch 1 -o date20220714_4top_cla_alledge_w2_L2 --device 0 --cla 1 --weight 4
+python eval_gnn.py --config config_4top_ttbar_w2_all.yaml -o 20220819_4top_ttbar_5fea_all_3L_w2 --device 2 --cla 1 --weight 1 --batch 1 --seed 12345 --fea 5

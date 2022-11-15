@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import numpy as np
 import torch
 import h5py
@@ -8,7 +8,7 @@ import torch_geometric.nn as PyG
 from torch_geometric.transforms import Distance
 from torch_geometric.data import DataLoader
 from torch_geometric.data import Data as PyGData
-from torch_geometric.data import Data
+
 import sys, os
 import subprocess
 import csv, yaml
@@ -18,6 +18,8 @@ from sklearn.metrics import accuracy_score
 import torch.optim as optim
 import argparse
 import pandas as pd
+import time
+start = time.time()
 
 
 sys.path.append("./python")
@@ -60,8 +62,13 @@ if not os.path.exists('result/' + args.output): os.makedirs('result/' + args.out
 ##### Define dataset instance #####
 # from dataset.HEPGNNDataset_h5_LHE_resampling import *
 # dset = HEPGNNDataset_h5_LHE_resampling()
+
+
 from dataset.HEPGNNDataset_pt_classify_fourfeature_v5_h5 import *
 dset = HEPGNNDataset_pt_classify_fourfeature_v5_h5()
+
+# from dataset.HEPGNNDataset_pt_classify_fourfeature_v5_tr import *
+# dset = HEPGNNDataset_pt_classify_fourfeature_v5_tr()
 
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
@@ -75,9 +82,12 @@ lengths.append(len(dset)-sum(lengths))
 torch.manual_seed(config['training']['randomSeed1'])
 trnDset, valDset, testDset = torch.utils.data.random_split(dset, lengths)
 
+# torch.multiprocessing.set_start_method('spawn', force = True)
+
 kwargs = {'num_workers':min(config['training']['nDataLoaders'], os.cpu_count()), 'pin_memory':False}
 # trnLoader = DataLoader(dset, batch_size=args.batch, shuffle=False, **kwargs)
-trnLoader = DataLoader(trnDset, batch_size=args.batch, shuffle=True, **kwargs)
+trnLoader = DataLoader(trnDset, batch_size=args.batch, shuffle=
+                       True, **kwargs)
 valLoader = DataLoader(valDset, batch_size=args.batch, shuffle=False, **kwargs)
 torch.manual_seed(torch.initial_seed())
 
@@ -109,6 +119,9 @@ from tqdm import tqdm
 bestState, bestLoss = {}, 1e9
 train = {'loss':[], 'val_loss':[]}
 nEpoch = config['training']['epoch']
+
+
+print("time:",time.time() -start)
 for epoch in range(nEpoch):
     model.train()
     trn_loss = 0.
@@ -116,11 +129,26 @@ for epoch in range(nEpoch):
     optm.zero_grad()
 
     for i, data in enumerate(tqdm(trnLoader, desc='epoch %d/%d' % (epoch+1, nEpoch))):
+#     for i, data in enumerate(trnLoader):
         data = data.to(device)
         
 
         weight = data.ww.float().to(device)
         
+        
+#         print(data,'1')
+#         print(weight,'2')
+#         print(data.pos,'3')
+#         print(data.rw,'4')
+#         print(data.ss,'5')
+#         print(data.ww,'6')
+#         print(data.x,'7')
+#         print(data.y,'8')
+#         print(data.bb,'9')
+#         print(data.edge_index,'10')
+#         print(data.er,'11')
+#         print(data.es,'12')
+#         stop
         pred = model(data)
       
         crit = torch.nn.MSELoss(size_average=None, reduce=None, reduction='mean')
@@ -135,6 +163,8 @@ for epoch in range(nEpoch):
         ibatch = len(weight)
         nProcessed += ibatch
         trn_loss += loss.item()*ibatch
+
+       
 
         
         
@@ -161,7 +191,7 @@ for epoch in range(nEpoch):
         ibatch = len(weight)
         nProcessed += ibatch
         val_loss += loss.item()*ibatch
-
+        
             
             
     val_loss /= nProcessed

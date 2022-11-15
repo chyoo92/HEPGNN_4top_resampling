@@ -1,0 +1,18 @@
+## Configuration for the training, evaluation
+samples:
+
+  - name: ttbar
+    label: 1
+    path : /users/yewzzang/data_graph/h5/ttbar/alledge/*.h5
+    xsec: 377.96
+    ngen: 333332000 
+
+
+training:
+    randomSeed1: 12345
+    nDataLoaders: 64
+
+    splitFractions: [0.6, 0.2] ## training set, validation set. (test set is the reminders)
+
+    epoch: 400
+    learningRate: 1e-4

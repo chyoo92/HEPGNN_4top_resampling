@@ -1,18 +1,30 @@
 #!/bin/bash
 
-python train_4top_resampling_lhe.py --config config_resamp_jet2_imsi.yaml --epoch 300 --batch 1024 -o date20220711_resampling_fea4_9s_ttbar_test1 --device 0 --cla 1 --model GNN1layer_re --fea 4 --lr 1e-3
+# python train_gnn.py --config config_resamp_4top_no.yaml -o 20220801_4top_resampling_fea3_no --device 3 --epoch 300 --batch 1024 --lr 1e-3 --seed 12345 --weight 0 --fea 3 --cla 1 --model GNN1layer_re
 
-python eval_4top_resampling_lhe.py --config config_resamp_jet2_imsi.yaml --batch 1 -o date20220711_resampling_fea4_9s_ttbar_test1 --device 0 --cla 1
-
-
-
-python train_4top_resampling_lhe.py --config config_resamp_jet2.yaml --epoch 300 --batch 1024 -o date20220713_resampling_fea4_9s_ttbar_test1_alledge --device 0 --cla 1 --model GNN1layer_re --fea 4 --lr 1e-3
-
-python eval_4top_resampling_lhe.py --config config_resamp_jet2.yaml --batch 1 -o date20220713_resampling_fea4_9s_ttbar_test1_alledge --device 0 --cla 1
+python eval_gnn.py --config config_resamp_4top_no.yaml -o 20220801_4top_resampling_fea3_no --device 0 --cla 1 --weight 0 --batch 1 --seed 12345 --fea 3
 
 
+# python train_gnn.py --config config_resamp_4top_no.yaml -o 20220801_4top_resampling_fea4_no --device 0 --epoch 300 --batch 1024 --lr 1e-3 --seed 12345 --weight 0 --fea 4 --cla 1 --model GNN1layer_re
 
-python train_4top_resampling_lhe.py --config config_resamp_jet.yaml --epoch 300 --batch 1024 -o date20220713_resampling_fea4_all_ttbar_test1_alledge --device 0 --cla 1 --model GNN1layer_re --fea 4 --lr 1e-3
+python eval_gnn.py --config config_resamp_4top_no.yaml -o 20220801_4top_resampling_fea4_no --device 0 --cla 1 --weight 0 --batch 1 --seed 12345 --fea 4
 
-python eval_4top_resampling_lhe.py --config config_resamp_jet.yaml --batch 1 -o date20220713_resampling_fea4_all_ttbar_test1_alledge --device 0 --cla 1
 
+
+
+# python train_gnn.py --config config_resamp_4top_no.yaml -o 20220801_4top_resampling_fea5_no --device 0 --epoch 300 --batch 1024 --lr 1e-3 --seed 12345 --weight 0 --fea 5 --cla 1 --model GNN1layer_re
+
+python eval_gnn.py --config config_resamp_4top_no.yaml -o 20220801_4top_resampling_fea5_no --device 0 --cla 1 --weight 0 --batch 1 --seed 12345 --fea 5
+
+# python train_gnn.py --config config_resamp_4top_all.yaml -o 20220801_4top_resampling_fea3_all --device 0 --epoch 300 --batch 1024 --lr 1e-3 --seed 12345 --weight 0 --fea 3 --cla 1 --model GNN1layer_re
+# 
+python eval_gnn.py --config config_resamp_4top_all.yaml -o 20220801_4top_resampling_fea3_all --device 0 --cla 1 --weight 0 --batch 1 --seed 12345 --fea 3
+
+# python train_gnn.py --config config_resamp_4top_all.yaml -o 20220801_4top_resampling_fea4_all --device 0 --epoch 300 --batch 1024 --lr 1e-3 --seed 12345 --weight 0 --fea 4 --cla 1 --model GNN1layer_re
+
+python eval_gnn.py --config config_resamp_4top_all.yaml -o 20220801_4top_resampling_fea4_all --device 0 --cla 1 --weight 0 --batch 1 --seed 12345 --fea 4
+
+
+# python train_gnn.py --config config_resamp_4top_all.yaml -o 20220801_4top_resampling_fea5_all --device 0 --epoch 300 --batch 1024 --lr 1e-3 --seed 12345 --weight 0 --fea 5 --cla 1 --model GNN1layer_re
+
+python eval_gnn.py --config config_resamp_4top_all.yaml -o 20220801_4top_resampling_fea5_all --device 0 --cla 1 --weight 0 --batch 1 --seed 12345 --fea 5

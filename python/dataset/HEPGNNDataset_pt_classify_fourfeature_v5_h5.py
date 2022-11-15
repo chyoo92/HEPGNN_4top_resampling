@@ -81,6 +81,7 @@ class HEPGNNDataset_pt_classify_fourfeature_v5_h5(PyGDataset):
                 'fileName':fName, 'fileIdx':fileIdx, 'sumweight':0,
             }
             self.sampleInfo = self.sampleInfo.append(info, ignore_index=True)
+#             self.sampleInfo = pd.concat([self.sampleInfo, info], ignore_index=True)
 
 
 
@@ -190,7 +191,7 @@ class HEPGNNDataset_pt_classify_fourfeature_v5_h5(PyGDataset):
                 f_edge_list.append(f_edge_reshape)
                 
             
-            
+           
             
             sumw = weightslist
 #             print(sumw, 'sumw')

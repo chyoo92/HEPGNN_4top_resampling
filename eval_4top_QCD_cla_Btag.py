@@ -55,11 +55,11 @@ elif args.weight == 0:
     from dataset.HEPGNNDataset_pt_classify_fourfeature_v2 import *
     dset = HEPGNNDataset_pt_classify_fourfeature_v2()
 elif args.weight == 3:
-    from dataset.HEPGNNDataset_pt_classify_fourfeature_v4_eval import *
-    dset = HEPGNNDataset_pt_classify_fourfeature_v4_eval()
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_v4_h5 import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_v4_h5()
 elif args.weight == 4:
-    from dataset.HEPGNNDataset_pt_classify_fourfeature_v6_eval import *
-    dset = HEPGNNDataset_pt_classify_fourfeature_v6_eval()
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_v6_h5_v2 import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_v6_h5_v2()
 
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
@@ -157,11 +157,9 @@ features = []
 batch_size = []
 real_weights = []
 scales = []
-
+btags = []
 eval_resampling = []
 eval_real = []
-
-remain_features = []
 model.eval()
 val_loss, val_acc = 0., 0.
 # for i, (data, label0, weight, rescale, procIdx, fileIdx, idx, dT, dVertex, vertexX, vertexY, vertexZ) in enumerate(tqdm(testLoader)):
@@ -172,8 +170,7 @@ for i, data in enumerate(tqdm(testLoader)):
     scale = data.ss.float().to(device)
     weight = data.ww.float().to(device)
     real_weight = data.rw.float().to(device)
-    fea_remain = data.fr.float().to(device)
-    
+    btag = data.bb.float().to(device)
     eval_resampling_weight = data.es.float().to(device)
     eval_real_weight = data.er.float().to(device)
 #     scaledweight = weight*scale
@@ -188,12 +185,7 @@ for i, data in enumerate(tqdm(testLoader)):
     
     scales.extend([x.item() for x in scale])
     labels.extend([x.item() for x in label])
-#     weights.extend([x.item() for x in weight])
-#     preds.extend([x.item() for x in pred.view(-1)])
-#     scaledWeights.extend([x.item() for x in (scaledweight).view(-1)])
-    
-    
-#     real_weights.extend([x.item() for x in real_weight])
+
     real_weights.append(real_weight.to("cpu").numpy()[0])
     
     eval_resampling.append(eval_resampling_weight.to("cpu").numpy()[0])
@@ -204,7 +196,8 @@ for i, data in enumerate(tqdm(testLoader)):
    
     features.extend([x.item() for x in data.x.view(-1)])
     batch_size.append(data.x.shape[0])
-    remain_features.extend([x.item() for x in fea_remain.view(-1)])
+
+    btags.append(btag)
 
 df = pd.DataFrame({'prediction':preds, 'weight':weights, 'label':labels,'real_weight':real_weights,'scale':scales,'eval_resampling':eval_resampling,'eval_real':eval_real})
 fPred = 'result/' + args.output + '/' + args.output + '.csv'
@@ -219,7 +212,7 @@ df4 = pd.DataFrame({'batch':batch_size})
 fPred4 = 'result/' + args.output + '/' + args.output + '_batch.csv'
 df4.to_csv(fPred4, index=False)
 
-df5 = pd.DataFram({'btag':remain_features})
+df5 = pd.DataFrame({'btag':btags})
 fPred5 ='result/' + args.output + '/' + args.output + '_Btag.csv'
 df5.to_csv(fPred5, index=False)
     

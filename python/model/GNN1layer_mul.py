@@ -34,8 +34,9 @@ class GNN1layer_mul(nn.Module):
         
         x, pos, batch = self.pool(x, pos, batch)
         
-        x = self.fc(x)
-        out = F.softmax(x, dim=0)
+        out = self.fc(x)
+        
+#         out = F.softmax(x, dim=0)
 #         x = self.fc(x)
 #         out = F.log_softmax(x)
         return out

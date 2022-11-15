@@ -1,0 +1,37 @@
+## Configuration for the training, evaluation
+samples:
+  - name: QCD700
+    label: 0
+    path: /users/yewzzang/data_graph/h5/QCD/noedge/HT700*/*.h5
+    xsec: 6330
+    ngen: 48158738
+  - name: QCD1000
+    label: 0
+    path: /users/yewzzang/data_graph/h5/QCD/noedge/HT1000*/*.h5
+    xsec: 1090
+    ngen: 14353647
+  - name: QCD1500
+    label: 0
+    path: /users/yewzzang/data_graph/h5/QCD/noedge/HT1500*/*.h5
+    xsec: 99.1
+    ngen: 10955087
+  - name: QCD2000
+    label: 0
+    path: /users/yewzzang/data_graph/h5/QCD/noedge/HT2000/*.h5
+    xsec: 20.2
+    ngen: 5475677
+
+  - name: ttbar
+    label: 1
+    path: /users/yewzzang/data_graph/h5/ttbar/noedge_w2_r/*.h5
+    xsec: 377.96
+    ngen: 333332000 
+
+training:
+    randomSeed1: 12345
+    nDataLoaders: 2
+
+    splitFractions: [0.6, 0.2] ## training set, validation set. (test set is the reminders)
+
+    epoch: 400
+    learningRate: 1e-4

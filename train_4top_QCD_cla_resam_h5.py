@@ -77,8 +77,8 @@ elif args.weight == 3:
     from dataset.HEPGNNDataset_pt_classify_fourfeature_v4_h5 import *
     dset = HEPGNNDataset_pt_classify_fourfeature_v4_h5()
 elif args.weight == 4:
-    from dataset.HEPGNNDataset_pt_classify_fourfeature_v6 import *
-    dset = HEPGNNDataset_pt_classify_fourfeature_v6()
+    from dataset.HEPGNNDataset_pt_classify_fourfeature_v6_h5 import *
+    dset = HEPGNNDataset_pt_classify_fourfeature_v6_h5()
 
 for sampleInfo in config['samples']:
     if 'ignore' in sampleInfo and sampleInfo['ignore']: continue
